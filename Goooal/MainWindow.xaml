@@ -21,12 +21,12 @@
                 <RowDefinition Height="0.9*"></RowDefinition>
             </Grid.RowDefinitions>
             <Viewbox Grid.Row="0">
-                <TextBlock Margin="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="GRANAT">
+                <TextBlock Margin="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Team1}">
                 </TextBlock>
             </Viewbox>
             <Border Grid.Row="1" BorderBrush="LightBlue" BorderThickness="5" CornerRadius="20" Margin="10">
                 <Viewbox>
-                    <TextBlock Grid.Row="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="5">
+                    <TextBlock Grid.Row="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="{Binding Score1}">
                     </TextBlock>
                 </Viewbox>
             </Border>
@@ -42,7 +42,7 @@
                 </Viewbox>
                 <Border Grid.Column="1" BorderBrush="LightBlue" BorderThickness="3" CornerRadius="10">
                     <Viewbox>
-                        <TextBlock Margin="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="3">
+                        <TextBlock Margin="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="{Binding Fouls1}">
                         </TextBlock>
                     </Viewbox>
                 </Border>
@@ -57,11 +57,12 @@
             </Grid.RowDefinitions>
             <Image Source=".\images\unnamed.jpg"></Image>
             <Viewbox Grid.Row="1">
-                <TextBlock Margin="5" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Final">
+                <TextBlock Margin="5" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding PlayName}">
                 </TextBlock>
             </Viewbox>
             <Viewbox Grid.Row="2">
-                <TextBlock Margin="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="12:00" Foreground="Red">
+                <TextBlock Margin="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                           Text="{Binding TimeString}" Foreground="Red">
                 </TextBlock>
             </Viewbox>
         </Grid>
@@ -73,12 +74,12 @@
                 <RowDefinition Height="0.9*"></RowDefinition>
             </Grid.RowDefinitions>
             <Viewbox Grid.Row="0">
-                <TextBlock Margin="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="GRANAT">
+                <TextBlock Margin="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Team2}">
                 </TextBlock>
             </Viewbox>
             <Border Grid.Row="1" BorderBrush="LightBlue" BorderThickness="5" CornerRadius="20" Margin="10">
                 <Viewbox>
-                    <TextBlock Grid.Row="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="5">
+                    <TextBlock Grid.Row="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="{Binding Score2}">
                     </TextBlock>
                 </Viewbox>
             </Border>
@@ -94,7 +95,7 @@
                 </Viewbox>
                 <Border Grid.Column="1" BorderBrush="LightBlue" BorderThickness="3" CornerRadius="10">
                     <Viewbox>
-                        <TextBlock Margin="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="3">
+                        <TextBlock Margin="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="{Binding Fouls2}">
                         </TextBlock>
                     </Viewbox>
                 </Border>
