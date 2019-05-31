@@ -2,11 +2,62 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Threading;
 
 namespace Goooal
 {
     public class MainWindowViewModel: NotifyPropertyChanged
     {
+        private TimeSpan initIntervalValue = new TimeSpan(0, 1, 0);
+        private readonly TimeSpan second = new TimeSpan(0, 0, 1);
+        private DispatcherTimer m_Timer;
+
+        public MainWindowViewModel()
+        {
+            Interval = initIntervalValue;
+            SetTimer();
+        }
+
+        public void ResetTimer()
+        {
+            if (m_Timer.IsEnabled)
+            {
+                m_Timer.Stop();
+            }
+            Interval = initIntervalValue;
+        }
+
+        public void SwitchTimer()
+        {
+            if (!m_Timer.IsEnabled)
+            {
+                m_Timer.Start();
+            }
+            else
+            {
+                m_Timer.Stop();
+            }
+        }
+
+        private void SetTimer()
+        {
+            m_Timer = new DispatcherTimer();
+            m_Timer.Tick += M_Timer_Tick;
+            m_Timer.Interval = new TimeSpan(0, 0, 1);
+        }
+
+        private void M_Timer_Tick(object sender, EventArgs e)
+        {
+            if (Interval.Ticks > 0)
+            {
+                Interval = Interval.Subtract(second);
+            }
+            else
+            {
+                m_Timer.Stop();
+            }
+        }
+
         private string m_Team1 = "Команда1";
         public string Team1
         {
@@ -76,6 +127,24 @@ namespace Goooal
                 m_Score2 = value;
                 OnPropertyChanged("Score2");
             }
+        }
+        private TimeSpan m_Interval;
+        public TimeSpan Interval
+        {
+            get => m_Interval;
+            set
+            {
+                m_Interval = value;
+                OnPropertyChanged("Interval");
+            }
+        }
+        public RelayCommand Score2IncCommand
+        {
+            get => new RelayCommand(s => Score2 = Score2 + 1);
+        }
+        public RelayCommand Score2DecCommand
+        {
+            get => new RelayCommand(s => Score2 = Score2 - 1);
         }
     }
 }
