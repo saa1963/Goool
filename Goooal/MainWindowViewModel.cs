@@ -18,7 +18,7 @@ namespace Goooal
             SetTimer();
         }
 
-        public void ResetTimer()
+        private void ResetTimer(object obj)
         {
             if (m_Timer.IsEnabled)
             {
@@ -27,7 +27,7 @@ namespace Goooal
             Interval = initIntervalValue;
         }
 
-        public void SwitchTimer()
+        private void SwitchTimer(object obj)
         {
             if (!m_Timer.IsEnabled)
             {
@@ -140,11 +140,27 @@ namespace Goooal
         }
         public RelayCommand Score2IncCommand
         {
-            get => new RelayCommand(s => Score2 = Score2 + 1);
+            get => new RelayCommand(s => Score2++);
         }
         public RelayCommand Score2DecCommand
         {
-            get => new RelayCommand(s => Score2 = Score2 - 1);
+            get => new RelayCommand(s => Score2--);
+        }
+        public RelayCommand Score1IncCommand
+        {
+            get => new RelayCommand(s => Score1++);
+        }
+        public RelayCommand Score1DecCommand
+        {
+            get => new RelayCommand(s => Score1--);
+        }
+        public RelayCommand SwitchTimerCommand
+        {
+            get => new RelayCommand(SwitchTimer);
+        }
+        public RelayCommand ResetTimerCommand
+        {
+            get => new RelayCommand(ResetTimer);
         }
     }
 }

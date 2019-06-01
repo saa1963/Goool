@@ -10,6 +10,32 @@
     <Window.Resources>
         <local:TimeSpanConverter x:Key="tsConverter"></local:TimeSpanConverter>
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding 
+                        Key="E" 
+                        Command="{Binding Score2DecCommand}">
+        </KeyBinding>
+        <KeyBinding 
+                        Key="R"
+                        Command="{Binding Score2IncCommand}">
+        </KeyBinding>
+        <KeyBinding 
+                        Key="Q" 
+                        Command="{Binding Score1DecCommand}">
+        </KeyBinding>
+        <KeyBinding 
+                        Key="W"
+                        Command="{Binding Score1IncCommand}">
+        </KeyBinding>
+        <KeyBinding 
+                        Key="Space"
+                        Command="{Binding SwitchTimerCommand}">
+        </KeyBinding>
+        <KeyBinding 
+                        Key="Space" Modifiers="Ctrl"
+                        Command="{Binding ResetTimerCommand}">
+        </KeyBinding>
+    </Window.InputBindings>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
@@ -28,6 +54,16 @@
                 </TextBlock>
             </Viewbox>
             <Border Grid.Row="1" BorderBrush="LightBlue" BorderThickness="5" CornerRadius="20" Margin="10" Name="tbScore1">
+                <Border.InputBindings>
+                    <MouseBinding
+                        MouseAction="LeftClick"
+                        Command="{Binding Score1IncCommand}">
+                    </MouseBinding>
+                    <MouseBinding
+                        MouseAction="RightClick"
+                        Command="{Binding Score1DecCommand}">
+                    </MouseBinding>
+                </Border.InputBindings>
                 <Viewbox>
                     <TextBlock Grid.Row="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="{Binding Score1}">
                     </TextBlock>
@@ -89,14 +125,6 @@
                         MouseAction="RightClick"
                         Command="{Binding Score2DecCommand}">
                     </MouseBinding>
-                    <KeyBinding 
-                        Key="F5" 
-                        Command="{Binding Score2DecCommand}">
-                    </KeyBinding>
-                    <KeyBinding 
-                        Key="F6" 
-                        Command="{Binding Score2IncCommand}">
-                    </KeyBinding>
                 </Border.InputBindings>
                 <Viewbox>
                     <TextBlock Grid.Row="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="{Binding Score2}">

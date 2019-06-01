@@ -19,12 +19,11 @@ namespace Goooal
     /// </summary>
     public partial class MainWindow : Window
     {
-        private MainWindowViewModel dContext;
         public MainWindow()
         {
             InitializeComponent();
             this.KeyUp += MainWindow_KeyUp;
-            DataContext = dContext = new MainWindowViewModel();
+            DataContext = new MainWindowViewModel();
         }
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
@@ -32,17 +31,6 @@ namespace Goooal
             if (e.Key == Key.Escape)
             {
                 Close();
-            }
-            if (e.Key == Key.Space)
-            {
-                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
-                {
-                    dContext.ResetTimer();
-                }
-                else
-                {
-                    dContext.SwitchTimer();
-                }
             }
         }
     }
