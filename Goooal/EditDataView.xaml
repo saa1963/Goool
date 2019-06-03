@@ -13,31 +13,39 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0">
                 <Label>Команда-1</Label>
-                <TextBox
+                <local:ClickSelectTextBox
                     Text="{Binding Path=Team1, ValidatesOnDataErrors=True, 
                     UpdateSourceTrigger=PropertyChanged}" MaxLength="50">
-                </TextBox>
+                </local:ClickSelectTextBox>
             </StackPanel>
             <StackPanel Grid.Row="1">
                 <Label>Команда-2</Label>
-                <TextBox
+                <local:ClickSelectTextBox
                     Text="{Binding Path=Team2, ValidatesOnDataErrors=True, 
                     UpdateSourceTrigger=PropertyChanged}" MaxLength="50">
-                </TextBox>
+                </local:ClickSelectTextBox>
             </StackPanel>
             <StackPanel Grid.Row="2">
                 <Label>Название игры</Label>
-                <TextBox
+                <local:ClickSelectTextBox
                     Text="{Binding Path=PlayName, ValidatesOnDataErrors=True, 
                     UpdateSourceTrigger=PropertyChanged}" MaxLength="50">
-                </TextBox>
+                </local:ClickSelectTextBox>
             </StackPanel>
-            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Row="3">
+                <Label>Кол-во минут</Label>
+                <local:ClickSelectTextBox
+                    Text="{Binding Path=Minutes, ValidatesOnDataErrors=True, 
+                    UpdateSourceTrigger=PropertyChanged}" MaxLength="50">
+                </local:ClickSelectTextBox>
+            </StackPanel>
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Width="60" Margin="10" IsDefault="True" Click="Ok_Click">ОК</Button>
-                <Button Width="60" Margin="10" IsCancel="True" Click="Cancel_Click">Отмена</Button>
+                <Button Width="60" Margin="10">Отмена</Button>
             </StackPanel>
         </Grid>
     </Grid>

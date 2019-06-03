@@ -8,13 +8,23 @@ namespace Goooal
 {
     public class MainWindowViewModel: NotifyPropertyChanged
     {
-        private TimeSpan initIntervalValue = new TimeSpan(0, 1, 0);
+        private TimeSpan m_InitIntervalValue = new TimeSpan(0, 1, 0);
+        //public TimeSpan InitIntervalValue
+        //{
+        //    get => m_InitIntervalValue;
+        //    set
+        //    {
+        //        m_InitIntervalValue = value;
+        //        OnPropertyChanged("InitIntervalValue");
+        //    }
+        //}
+
         private readonly TimeSpan second = new TimeSpan(0, 0, 1);
         private DispatcherTimer m_Timer;
 
         public MainWindowViewModel()
         {
-            Interval = initIntervalValue;
+            Interval = m_InitIntervalValue;
             SetTimer();
         }
 
@@ -24,7 +34,7 @@ namespace Goooal
             {
                 m_Timer.Stop();
             }
-            Interval = initIntervalValue;
+            Interval = m_InitIntervalValue;
         }
 
         private void SwitchTimer(object obj)
@@ -185,14 +195,32 @@ namespace Goooal
 
         private void EditData(object obj)
         {
-            var vm = new EditDataViewModel() { Team1 = Team1, Team2 = Team2, PlayName = PlayName };
+            var vm = new EditDataViewModel() { Team1 = Team1, Team2 = Team2, PlayName = PlayName, Minutes = m_InitIntervalValue.Minutes };
             var f = new EditDataView() { DataContext = vm };
             if (f.ShowDialog() ?? false)
             {
                 Team1 = vm.Team1;
                 Team2 = vm.Team2;
                 PlayName = vm.PlayName;
+                var oldInterval = m_InitIntervalValue;
+                m_InitIntervalValue = new TimeSpan(0, vm.Minutes, 0);
+                if (!m_Timer.IsEnabled && Interval.Minutes == oldInterval.Minutes)
+                {
+                    Interval = m_InitIntervalValue;
+                }
             }
+        }
+
+        public RelayCommand HelpCommand
+        {
+            get => new RelayCommand(Help);
+        }
+
+        private void Help(object obj)
+        {
+            var vm = new HelpViewModel();
+            var f = new HelpView() { DataContext = vm };
+            f.ShowDialog();
         }
     }
 }

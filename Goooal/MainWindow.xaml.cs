@@ -22,13 +22,13 @@ namespace Goooal
         public MainWindow()
         {
             InitializeComponent();
-            this.KeyUp += MainWindow_KeyUp;
+            this.PreviewKeyDown += MainWindow_PreviewKeyDown;
             DataContext = new MainWindowViewModel();
         }
 
-        private void MainWindow_KeyUp(object sender, KeyEventArgs e)
+        private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
+            if (!e.Handled && e.Key == Key.Escape)
             {
                 Close();
             }

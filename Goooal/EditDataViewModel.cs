@@ -37,5 +37,15 @@ namespace Goooal
                 OnPropertyChanged("Team2");
             }
         }
+        private int m_Minutes;
+        public int Minutes
+        {
+            get => m_Minutes;
+            set
+            {
+                m_Minutes = value;
+                OnPropertyChanged("Minutes");
+            }
+        }
     }
 }

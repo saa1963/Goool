@@ -55,6 +55,10 @@
                         Key="Return"
                         Command="{Binding EditDataCommand}">
         </KeyBinding>
+        <KeyBinding 
+                        Key="F1"
+                        Command="{Binding HelpCommand}">
+        </KeyBinding>
     </Window.InputBindings>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -126,7 +130,7 @@
             </Grid.RowDefinitions>
             <Image Source=".\images\unnamed.jpg"></Image>
             <Viewbox Grid.Row="1">
-                <TextBlock Margin="5" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding PlayName}">
+                <TextBlock TextWrapping="Wrap" Margin="5" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding PlayName}">
                 </TextBlock>
             </Viewbox>
             <Viewbox Grid.Row="2">

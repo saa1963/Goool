@@ -14,28 +14,23 @@ using System.Windows.Shapes;
 namespace Goooal
 {
     /// <summary>
-    /// Логика взаимодействия для EditDataView.xaml
+    /// Логика взаимодействия для HelpView.xaml
     /// </summary>
-    public partial class EditDataView : Window
+    public partial class HelpView : Window
     {
-        public EditDataView()
+        public HelpView()
         {
             InitializeComponent();
-            this.PreviewKeyDown += EditDataView_PreviewKeyDown;
+            PreviewKeyDown += HelpView_PreviewKeyDown;
         }
 
-        private void EditDataView_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void HelpView_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
                 e.Handled = true;
-                DialogResult = false;
+                DialogResult = true;
             }
-        }
-
-        private void Ok_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = true;
         }
     }
 }

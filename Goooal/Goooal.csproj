@@ -53,13 +53,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ClickSelectTextBox.cs" />
     <Compile Include="EditDataView.xaml.cs">
       <DependentUpon>EditDataView.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditDataViewModel.cs" />
+    <Compile Include="HelpView.xaml.cs">
+      <DependentUpon>HelpView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HelpViewModel.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="TimeSpanConverter.cs" />
     <Page Include="EditDataView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HelpView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
