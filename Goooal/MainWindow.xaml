@@ -28,12 +28,32 @@
                         Command="{Binding Score1IncCommand}">
         </KeyBinding>
         <KeyBinding 
+                        Key="D" 
+                        Command="{Binding Fouls2DecCommand}">
+        </KeyBinding>
+        <KeyBinding 
+                        Key="F"
+                        Command="{Binding Fouls2IncCommand}">
+        </KeyBinding>
+        <KeyBinding 
+                        Key="A" 
+                        Command="{Binding Fouls1DecCommand}">
+        </KeyBinding>
+        <KeyBinding 
+                        Key="S"
+                        Command="{Binding Fouls1IncCommand}">
+        </KeyBinding>
+        <KeyBinding 
                         Key="Space"
                         Command="{Binding SwitchTimerCommand}">
         </KeyBinding>
         <KeyBinding 
                         Key="Space" Modifiers="Ctrl"
                         Command="{Binding ResetTimerCommand}">
+        </KeyBinding>
+        <KeyBinding 
+                        Key="Return"
+                        Command="{Binding EditDataCommand}">
         </KeyBinding>
     </Window.InputBindings>
     <Grid>
@@ -80,6 +100,16 @@
                     </TextBlock>
                 </Viewbox>
                 <Border Grid.Column="1" BorderBrush="LightBlue" BorderThickness="3" CornerRadius="10">
+                    <Border.InputBindings>
+                        <MouseBinding
+                        MouseAction="LeftClick"
+                        Command="{Binding Fouls1IncCommand}">
+                        </MouseBinding>
+                        <MouseBinding
+                        MouseAction="RightClick"
+                        Command="{Binding Fouls1DecCommand}">
+                        </MouseBinding>
+                    </Border.InputBindings>
                     <Viewbox>
                         <TextBlock Margin="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="{Binding Fouls1}">
                         </TextBlock>
@@ -142,6 +172,16 @@
                     </TextBlock>
                 </Viewbox>
                 <Border Grid.Column="1" BorderBrush="LightBlue" BorderThickness="3" CornerRadius="10">
+                    <Border.InputBindings>
+                        <MouseBinding
+                        MouseAction="LeftClick"
+                        Command="{Binding Fouls2IncCommand}">
+                        </MouseBinding>
+                        <MouseBinding
+                        MouseAction="RightClick"
+                        Command="{Binding Fouls2DecCommand}">
+                        </MouseBinding>
+                    </Border.InputBindings>
                     <Viewbox>
                         <TextBlock Margin="1" HorizontalAlignment="Center"  VerticalAlignment="Center" Text="{Binding Fouls2}">
                         </TextBlock>

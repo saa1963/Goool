@@ -162,5 +162,37 @@ namespace Goooal
         {
             get => new RelayCommand(ResetTimer);
         }
+        public RelayCommand Fouls2IncCommand
+        {
+            get => new RelayCommand(s => Fouls2++);
+        }
+        public RelayCommand Fouls2DecCommand
+        {
+            get => new RelayCommand(s => Fouls2--);
+        }
+        public RelayCommand Fouls1IncCommand
+        {
+            get => new RelayCommand(s => Fouls1++);
+        }
+        public RelayCommand Fouls1DecCommand
+        {
+            get => new RelayCommand(s => Fouls1--);
+        }
+        public RelayCommand EditDataCommand
+        {
+            get => new RelayCommand(EditData);
+        }
+
+        private void EditData(object obj)
+        {
+            var vm = new EditDataViewModel() { Team1 = Team1, Team2 = Team2, PlayName = PlayName };
+            var f = new EditDataView() { DataContext = vm };
+            if (f.ShowDialog() ?? false)
+            {
+                Team1 = vm.Team1;
+                Team2 = vm.Team2;
+                PlayName = vm.PlayName;
+            }
+        }
     }
 }
