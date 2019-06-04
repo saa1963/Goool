@@ -11,7 +11,7 @@ namespace Goooal
         private TimeSpan m_InitIntervalValue = new TimeSpan(0, 1, 0);
 
         private readonly TimeSpan second = new TimeSpan(0, 0, 1);
-        private DispatcherTimer m_Timer;
+        private DispatcherTimer Timer { get; set; }
 
         public MainWindowViewModel()
         {
@@ -19,32 +19,45 @@ namespace Goooal
             SetTimer();
         }
 
+        private bool m_EnabledTimer = true;
+        public bool EnabledTimer
+        {
+            get => m_EnabledTimer;
+            set
+            {
+                m_EnabledTimer = value;
+                OnPropertyChanged("EnabledTimer");
+            }
+        }
+
         private void ResetTimer(object obj)
         {
-            if (m_Timer.IsEnabled)
+            if (Timer.IsEnabled)
             {
-                m_Timer.Stop();
+                Timer.Stop();
             }
+            EnabledTimer = true;
             Interval = m_InitIntervalValue;
         }
 
         private void SwitchTimer(object obj)
         {
-            if (!m_Timer.IsEnabled)
+            if (!Timer.IsEnabled)
             {
-                m_Timer.Start();
+                Timer.Start();
             }
             else
             {
-                m_Timer.Stop();
+                Timer.Stop();
             }
+            EnabledTimer = Timer.IsEnabled;
         }
 
         private void SetTimer()
         {
-            m_Timer = new DispatcherTimer();
-            m_Timer.Tick += M_Timer_Tick;
-            m_Timer.Interval = new TimeSpan(0, 0, 1);
+            Timer = new DispatcherTimer();
+            Timer.Tick += M_Timer_Tick;
+            Timer.Interval = new TimeSpan(0, 0, 1);
         }
 
         private void M_Timer_Tick(object sender, EventArgs e)
@@ -55,7 +68,7 @@ namespace Goooal
             }
             else
             {
-                m_Timer.Stop();
+                Timer.Stop();
             }
         }
 
@@ -195,7 +208,7 @@ namespace Goooal
                 PlayName = vm.PlayName;
                 var oldInterval = m_InitIntervalValue;
                 m_InitIntervalValue = new TimeSpan(0, vm.Minutes, 0);
-                if (!m_Timer.IsEnabled && Interval.Minutes == oldInterval.Minutes)
+                if (!Timer.IsEnabled && Interval.Minutes == oldInterval.Minutes)
                 {
                     Interval = m_InitIntervalValue;
                 }

@@ -22,16 +22,7 @@ namespace Goooal
         public MainWindow()
         {
             InitializeComponent();
-            this.PreviewKeyDown += MainWindow_PreviewKeyDown;
             DataContext = new MainWindowViewModel();
-        }
-
-        private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (!e.Handled && e.Key == Key.Escape)
-            {
-                Close();
-            }
         }
     }
 }

@@ -9,6 +9,14 @@
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
         <local:TimeSpanConverter x:Key="tsConverter"></local:TimeSpanConverter>
+        <Style x:Key="Timer" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding EnabledTimer}"
+                        Value="False">
+                    <Setter Property="Foreground" Value="Red"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding 
@@ -135,10 +143,7 @@
             </Viewbox>
             <Viewbox Grid.Row="2">
                 <TextBlock Margin="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                           Text="{Binding Interval, Converter={StaticResource tsConverter}}">
-                    <TextBlock.Triggers>
-                        <DataTrigger Binding="{}"
-                    </TextBlock.Triggers>
+                           Style="{StaticResource Timer}" Text="{Binding Interval, Converter={StaticResource tsConverter}}">
                 </TextBlock>
             </Viewbox>
         </Grid>
