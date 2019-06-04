@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Goooal"
         mc:Ignorable="d" Background="Black"
-        Title="HelpView" Height="500" Width="300" WindowStartupLocation="CenterScreen" WindowStyle="None">
+        BorderBrush="White" BorderThickness="2"
+        Title="Помощь" Height="500" Width="300" WindowStartupLocation="CenterScreen" 
+        WindowStyle="ToolWindow">
     <Window.Resources>
         <Style x:Key="k1" TargetType="TextBlock">
             <Setter Property="Margin" Value="5"></Setter>
@@ -42,8 +44,9 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Viewbox>
-        <TextBlock Grid.Row="1" Foreground="White" 
-                   Margin="5" HorizontalAlignment="Center"
-                   Text=""></TextBlock>
+        <TextBlock Grid.Row="1" Foreground="Yellow" 
+                   Margin="10" HorizontalAlignment="Center"
+                   TextWrapping="Wrap"
+                   Text="Copyright (c) 2019 Andrey Soshin a_soshin@mail.ru Goooal является свободно распространяемой программой"></TextBlock>
     </Grid>
 </Window>

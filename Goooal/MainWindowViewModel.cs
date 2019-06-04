@@ -9,15 +9,6 @@ namespace Goooal
     public class MainWindowViewModel: NotifyPropertyChanged
     {
         private TimeSpan m_InitIntervalValue = new TimeSpan(0, 1, 0);
-        //public TimeSpan InitIntervalValue
-        //{
-        //    get => m_InitIntervalValue;
-        //    set
-        //    {
-        //        m_InitIntervalValue = value;
-        //        OnPropertyChanged("InitIntervalValue");
-        //    }
-        //}
 
         private readonly TimeSpan second = new TimeSpan(0, 0, 1);
         private DispatcherTimer m_Timer;
