@@ -9,14 +9,18 @@ namespace Goooal
     public class MainWindowViewModel: NotifyPropertyChanged
     {
         private TimeSpan m_InitIntervalValue = new TimeSpan(0, 1, 0);
+        private TimeSpan m_InitIntervalValue_1 = new TimeSpan(0, 0, 15);
 
         private readonly TimeSpan second = new TimeSpan(0, 0, 1);
         private DispatcherTimer Timer { get; set; }
+        private DispatcherTimer Timer_1 { get; set; }
 
         public MainWindowViewModel()
         {
             Interval = m_InitIntervalValue;
+            Interval_1 = m_InitIntervalValue_1;
             SetTimer();
+            SetTimer_1();
         }
 
         private bool m_EnabledTimer = true;
@@ -30,6 +34,17 @@ namespace Goooal
             }
         }
 
+        //private bool m_EnabledTimer_1 = true;
+        public bool EnabledTimer_1
+        {
+            get => Timer_1.IsEnabled;
+            set
+            {
+                //m_EnabledTimer_1 = value;
+                OnPropertyChanged("EnabledTimer_1");
+            }
+        }
+
         private void ResetTimer(object obj)
         {
             if (Timer.IsEnabled)
@@ -38,6 +53,16 @@ namespace Goooal
             }
             EnabledTimer = true;
             Interval = m_InitIntervalValue;
+        }
+
+        private void ResetTimer_1(object obj)
+        {
+            if (Timer_1.IsEnabled)
+            {
+                Timer_1.Stop();
+            }
+            EnabledTimer_1 = true;
+            Interval_1 = m_InitIntervalValue_1;
         }
 
         private void SwitchTimer(object obj)
@@ -53,11 +78,32 @@ namespace Goooal
             EnabledTimer = Timer.IsEnabled;
         }
 
+        private void SwitchTimer_1(object obj)
+        {
+            ResetTimer_1(null);
+            if (!Timer_1.IsEnabled)
+            {
+                Timer_1.Start();
+            }
+            else
+            {
+                Timer_1.Stop();
+            }
+            EnabledTimer_1 = Timer_1.IsEnabled;
+        }
+
         private void SetTimer()
         {
             Timer = new DispatcherTimer();
             Timer.Tick += M_Timer_Tick;
             Timer.Interval = new TimeSpan(0, 0, 1);
+        }
+
+        private void SetTimer_1()
+        {
+            Timer_1 = new DispatcherTimer();
+            Timer_1.Tick += M_Timer_1_Tick;
+            Timer_1.Interval = new TimeSpan(0, 0, 1);
         }
 
         private void M_Timer_Tick(object sender, EventArgs e)
@@ -69,6 +115,18 @@ namespace Goooal
             else
             {
                 Timer.Stop();
+            }
+        }
+
+        private void M_Timer_1_Tick(object sender, EventArgs e)
+        {
+            if (Interval_1.Ticks > 0)
+            {
+                Interval_1 = Interval_1.Subtract(second);
+            }
+            else
+            {
+                Timer_1.Stop();
             }
         }
 
@@ -152,6 +210,16 @@ namespace Goooal
                 OnPropertyChanged("Interval");
             }
         }
+        private TimeSpan m_Interval_1;
+        public TimeSpan Interval_1
+        {
+            get => m_Interval_1;
+            set
+            {
+                m_Interval_1 = value;
+                OnPropertyChanged("Interval_1");
+            }
+        }
         public RelayCommand Score2IncCommand
         {
             get => new RelayCommand(s => Score2++);
@@ -172,9 +240,17 @@ namespace Goooal
         {
             get => new RelayCommand(SwitchTimer);
         }
+        public RelayCommand SwitchTimer_1Command
+        {
+            get => new RelayCommand(SwitchTimer_1);
+        }
         public RelayCommand ResetTimerCommand
         {
             get => new RelayCommand(ResetTimer);
+        }
+        public RelayCommand ResetTimer_1Command
+        {
+            get => new RelayCommand(ResetTimer_1);
         }
         public RelayCommand Fouls2IncCommand
         {
