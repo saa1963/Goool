@@ -3,9 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Threading;
+using Stateless;
 
 namespace Goooal
 {
+    enum TabloStates
+    {
+        State1, State5, State6, State8, State11, State12, State16
+    }
+    enum TabloProcesses
+    {
+        Space, Z, Self, Timer, Timer_1, Ctrl_Space
+    }
     public class MainWindowViewModel: NotifyPropertyChanged
     {
         private TimeSpan m_InitIntervalValue = new TimeSpan(0, 1, 0);
@@ -17,31 +26,35 @@ namespace Goooal
 
         public MainWindowViewModel()
         {
+            stateMachine = new StateMachine<TabloStates, TabloProcesses>(TabloStates.State1);
+            stateMachine.Configure(TabloStates.State1).Permit(TabloProcesses.Ctrl_Space, TabloStates.State6);
+            stateMachine.Configure(TabloStates.State1).Permit(TabloProcesses.Ctrl_Space, TabloStates.State8);
+            stateMachine.Configure(TabloStates.State1).Permit(TabloProcesses.Ctrl_Space, TabloStates.State11);
+            stateMachine.Configure(TabloStates.State1).Permit(TabloProcesses.Ctrl_Space, TabloStates.State12);
+            stateMachine.Configure(TabloStates.State1).Permit(TabloProcesses.Ctrl_Space, TabloStates.State16);
             Interval = m_InitIntervalValue;
             Interval_1 = m_InitIntervalValue_1;
             SetTimer();
             SetTimer_1();
         }
-
-        private bool m_EnabledTimer = true;
-        public bool EnabledTimer
+        private bool m_TimerStopped = false;
+        public bool TimerStopped
         {
-            get => m_EnabledTimer;
+            get => m_TimerStopped;
             set
             {
-                m_EnabledTimer = value;
-                OnPropertyChanged("EnabledTimer");
+                m_TimerStopped = value;
+                OnPropertyChanged("TimerStopped");
             }
         }
-
-        //private bool m_EnabledTimer_1 = true;
-        public bool EnabledTimer_1
+        private bool m_Timer_1_InitOrEnded = true;
+        public bool Timer_1_InitOrEnded
         {
-            get => Timer_1.IsEnabled;
+            get => m_Timer_1_InitOrEnded;
             set
             {
-                //m_EnabledTimer_1 = value;
-                OnPropertyChanged("EnabledTimer_1");
+                m_Timer_1_InitOrEnded = value;
+                OnPropertyChanged("Timer_1_InitOrEnded");
             }
         }
 
@@ -51,7 +64,8 @@ namespace Goooal
             {
                 Timer.Stop();
             }
-            EnabledTimer = true;
+            TimerStopped = false;
+            Timer_1_InitOrEnded = true;
             Interval = m_InitIntervalValue;
         }
 
@@ -61,7 +75,6 @@ namespace Goooal
             {
                 Timer_1.Stop();
             }
-            EnabledTimer_1 = true;
             Interval_1 = m_InitIntervalValue_1;
         }
 
@@ -70,12 +83,14 @@ namespace Goooal
             if (!Timer.IsEnabled)
             {
                 Timer.Start();
+                TimerStopped = false;
+                Timer_1_InitOrEnded = false;
             }
             else
             {
                 Timer.Stop();
+                TimerStopped = true;
             }
-            EnabledTimer = Timer.IsEnabled;
         }
 
         private void SwitchTimer_1(object obj)
@@ -89,7 +104,6 @@ namespace Goooal
             {
                 Timer_1.Stop();
             }
-            EnabledTimer_1 = Timer_1.IsEnabled;
         }
 
         private void SetTimer()
@@ -115,6 +129,7 @@ namespace Goooal
             else
             {
                 Timer.Stop();
+                TimerStopped = true;
             }
         }
 
@@ -127,6 +142,7 @@ namespace Goooal
             else
             {
                 Timer_1.Stop();
+                m_Timer_1_InitOrEnded = true;
             }
         }
 
@@ -201,6 +217,8 @@ namespace Goooal
             }
         }
         private TimeSpan m_Interval;
+        private StateMachine<TabloStates, TabloProcesses> stateMachine;
+
         public TimeSpan Interval
         {
             get => m_Interval;

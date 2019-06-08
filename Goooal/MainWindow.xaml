@@ -12,19 +12,20 @@
         <local:TimeSpanConverter_1 x:Key="tsConverter_1"></local:TimeSpanConverter_1>
         <Style x:Key="Timer" TargetType="TextBlock">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding EnabledTimer}"
-                        Value="False">
+                <DataTrigger Binding="{Binding TimerStopped}"
+                        Value="True">
                     <Setter Property="Foreground" Value="Red"></Setter>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="Timer_1" TargetType="TextBlock">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding EnabledTimer_1}"
-                        Value="False">
+                <DataTrigger Binding="{Binding Timer_1_InitOrEnded}"
+                        Value="True">
                     <Setter Property="Visibility"  Value="Hidden"></Setter>
                 </DataTrigger>
             </Style.Triggers>
+            <Setter Property="Foreground" Value="Red"></Setter>
         </Style>
     </Window.Resources>
     <Window.InputBindings>
