@@ -152,9 +152,9 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
+                <RowDefinition Height="3*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Image Source=".\images\unnamed.jpg"></Image>
+            <Image Grid.Row="0" Source=".\images\unnamed.jpg"></Image>
             <Viewbox Grid.Row="1">
                 <TextBlock TextWrapping="Wrap" Margin="5" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding PlayName}">
                 </TextBlock>
@@ -169,6 +169,20 @@
                            Style="{StaticResource Timer_1}" Text="{Binding Interval_1, Converter={StaticResource tsConverter_1}}">
                 </TextBlock>
             </Viewbox>
+            <!--<Viewbox Grid.Row="1">
+                <TextBlock TextWrapping="Wrap" Margin="5" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Полуфинал">
+                </TextBlock>
+            </Viewbox>
+            <Viewbox Grid.Row="2">
+                <TextBlock Margin="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                           Style="{StaticResource Timer}" Text="15:00">
+                </TextBlock>
+            </Viewbox>
+            <Viewbox Grid.Row="3">
+                <TextBlock Margin="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                           Style="{StaticResource Timer_1}" Text="15">
+                </TextBlock>
+            </Viewbox>-->
         </Grid>
         <Grid Grid.Column="2" Margin="0,40,0,20">
             <Grid.RowDefinitions>

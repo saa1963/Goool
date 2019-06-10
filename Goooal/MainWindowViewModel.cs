@@ -9,7 +9,7 @@ namespace Goooal
 {
     enum TabloStates
     {
-        State1, State5, State6, State8, State11, State12, State16
+        II_1, AI_5, AA_6, AE_8, PI_9, PP_11, PE_12, EE_16
     }
     enum TabloProcesses
     {
@@ -26,17 +26,125 @@ namespace Goooal
 
         public MainWindowViewModel()
         {
-            stateMachine = new StateMachine<TabloStates, TabloProcesses>(TabloStates.State1);
-            stateMachine.Configure(TabloStates.State1).Permit(TabloProcesses.Ctrl_Space, TabloStates.State6);
-            stateMachine.Configure(TabloStates.State1).Permit(TabloProcesses.Ctrl_Space, TabloStates.State8);
-            stateMachine.Configure(TabloStates.State1).Permit(TabloProcesses.Ctrl_Space, TabloStates.State11);
-            stateMachine.Configure(TabloStates.State1).Permit(TabloProcesses.Ctrl_Space, TabloStates.State12);
-            stateMachine.Configure(TabloStates.State1).Permit(TabloProcesses.Ctrl_Space, TabloStates.State16);
-            Interval = m_InitIntervalValue;
-            Interval_1 = m_InitIntervalValue_1;
+            stateMachine = new StateMachine<TabloStates, TabloProcesses>(TabloStates.II_1);
+            stateMachine.Configure(TabloStates.II_1)
+                .OnEntry(() => InitState1())
+                .PermitReentry(TabloProcesses.Ctrl_Space)
+                .Permit(TabloProcesses.Space, TabloStates.AI_5)
+                .PermitReentry(TabloProcesses.Z);
+            stateMachine.Configure(TabloStates.AI_5)
+                .OnEntry(() => InitState5())
+                .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
+                .Permit(TabloProcesses.Self, TabloStates.AA_6)
+                .PermitReentry(TabloProcesses.Space)
+                .PermitReentry(TabloProcesses.Z);
+            stateMachine.Configure(TabloStates.AA_6)
+                .OnEntry(() => InitState6())
+                .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
+                .Permit(TabloProcesses.Z, TabloStates.AI_5)
+                .Permit(TabloProcesses.Space, TabloStates.PP_11)
+                .Permit(TabloProcesses.Timer_1, TabloStates.AE_8)
+                .Permit(TabloProcesses.Timer, TabloStates.EE_16);
+            stateMachine.Configure(TabloStates.AE_8)
+                .OnEntry(() => InitState8())
+                .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
+                .Permit(TabloProcesses.Timer, TabloStates.EE_16)
+                .Permit(TabloProcesses.Z, TabloStates.AI_5)
+                .Permit(TabloProcesses.Space, TabloStates.PE_12);
+            stateMachine.Configure(TabloStates.PI_9)
+                .OnEntry(() => InitState9())
+                .Permit(TabloProcesses.Space, TabloStates.AA_6)
+                .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
+                .PermitReentry(TabloProcesses.Z);
+            stateMachine.Configure(TabloStates.PP_11)
+                .OnEntry(() => InitState11())
+                .Permit(TabloProcesses.Z, TabloStates.PI_9)
+                .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
+                .Permit(TabloProcesses.Space, TabloStates.AA_6);
+            stateMachine.Configure(TabloStates.PE_12)
+                .OnEntry(() => InitState12())
+                .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
+                .Permit(TabloProcesses.Space, TabloStates.AE_8)
+                .PermitReentry(TabloProcesses.Z);
+            stateMachine.Configure(TabloStates.EE_16)
+                .OnEntry(() => InitState16())
+                .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
+                .PermitReentry(TabloProcesses.Space)
+                .PermitReentry(TabloProcesses.Z);
             SetTimer();
             SetTimer_1();
+            stateMachine.Fire(TabloProcesses.Ctrl_Space);
         }
+
+        private void InitState9()
+        {
+            Timer.Stop();
+            Timer_1.Stop();
+            TimerStopped = true;
+            Timer_1_InitOrEnded = true;
+            Interval_1 = m_InitIntervalValue_1;
+        }
+
+        private void InitState16()
+        {
+            Timer.Stop();
+            Timer_1.Stop();
+            TimerStopped = false;
+            Timer_1_InitOrEnded = true;
+        }
+
+        private void InitState12()
+        {
+            Timer.Stop();
+            Timer_1.Stop();
+            TimerStopped = true;
+            Timer_1_InitOrEnded = true;
+        }
+
+        private void InitState11()
+        {
+            Timer.Stop();
+            Timer_1.Stop();
+            TimerStopped = true;
+            Timer_1_InitOrEnded = false;
+        }
+
+        private void InitState8()
+        {
+            Timer.Start();
+            Timer_1.Stop();
+            TimerStopped = false;
+            Timer_1_InitOrEnded = true;
+        }
+
+        private void InitState6()
+        {
+            Timer.Start();
+            Timer_1.Start();
+            TimerStopped = false;
+            Timer_1_InitOrEnded = false;
+        }
+
+        private void InitState5()
+        {
+            Timer.Start();
+            Timer_1.Stop();
+            TimerStopped = false;
+            Timer_1_InitOrEnded = true;
+            Interval_1 = m_InitIntervalValue_1;
+            stateMachine.Fire(TabloProcesses.Self);
+        }
+
+        private void InitState1()
+        {
+            Timer.Stop();
+            Timer_1.Stop();
+            TimerStopped = false;
+            Timer_1_InitOrEnded = true;
+            Interval = m_InitIntervalValue;
+            Interval_1 = m_InitIntervalValue_1;
+        }
+
         private bool m_TimerStopped = false;
         public bool TimerStopped
         {
@@ -60,50 +168,17 @@ namespace Goooal
 
         private void ResetTimer(object obj)
         {
-            if (Timer.IsEnabled)
-            {
-                Timer.Stop();
-            }
-            TimerStopped = false;
-            Timer_1_InitOrEnded = true;
-            Interval = m_InitIntervalValue;
-        }
-
-        private void ResetTimer_1(object obj)
-        {
-            if (Timer_1.IsEnabled)
-            {
-                Timer_1.Stop();
-            }
-            Interval_1 = m_InitIntervalValue_1;
+            stateMachine.Fire(TabloProcesses.Ctrl_Space);
         }
 
         private void SwitchTimer(object obj)
         {
-            if (!Timer.IsEnabled)
-            {
-                Timer.Start();
-                TimerStopped = false;
-                Timer_1_InitOrEnded = false;
-            }
-            else
-            {
-                Timer.Stop();
-                TimerStopped = true;
-            }
+            stateMachine.Fire(TabloProcesses.Space);
         }
 
         private void SwitchTimer_1(object obj)
         {
-            ResetTimer_1(null);
-            if (!Timer_1.IsEnabled)
-            {
-                Timer_1.Start();
-            }
-            else
-            {
-                Timer_1.Stop();
-            }
+            stateMachine.Fire(TabloProcesses.Z);
         }
 
         private void SetTimer()
@@ -128,8 +203,7 @@ namespace Goooal
             }
             else
             {
-                Timer.Stop();
-                TimerStopped = true;
+                stateMachine.Fire(TabloProcesses.Timer);
             }
         }
 
@@ -141,8 +215,7 @@ namespace Goooal
             }
             else
             {
-                Timer_1.Stop();
-                m_Timer_1_InitOrEnded = true;
+                stateMachine.Fire(TabloProcesses.Timer_1);
             }
         }
 
@@ -265,10 +338,6 @@ namespace Goooal
         public RelayCommand ResetTimerCommand
         {
             get => new RelayCommand(ResetTimer);
-        }
-        public RelayCommand ResetTimer_1Command
-        {
-            get => new RelayCommand(ResetTimer_1);
         }
         public RelayCommand Fouls2IncCommand
         {
