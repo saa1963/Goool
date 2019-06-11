@@ -81,10 +81,10 @@
                         Key="Z"
                         Command="{Binding SwitchTimer_1Command}">
         </KeyBinding>
-        <!--<KeyBinding 
-                        Key="X"
-                        Command="{Binding ResetTimer_1Command}">
-        </KeyBinding>-->
+        <KeyBinding 
+                        Key="G"
+                        Command="{Binding GraphCommand}">
+        </KeyBinding>
     </Window.InputBindings>
     <Grid>
         <Grid.ColumnDefinitions>

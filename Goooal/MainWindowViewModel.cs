@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Threading;
 using Stateless;
+using System.IO;
+using Stateless.Graph;
 
 namespace Goooal
 {
@@ -49,8 +51,9 @@ namespace Goooal
                 .OnEntry(() => InitState8())
                 .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
                 .Permit(TabloProcesses.Timer, TabloStates.EE_16)
-                .Permit(TabloProcesses.Z, TabloStates.AI_5)
-                .Permit(TabloProcesses.Space, TabloStates.PE_12);
+                .Permit(TabloProcesses.Self, TabloStates.PI_9)
+                .Permit(TabloProcesses.Space, TabloStates.PE_12)
+                .PermitReentry(TabloProcesses.Z);
             stateMachine.Configure(TabloStates.PI_9)
                 .OnEntry(() => InitState9())
                 .Permit(TabloProcesses.Space, TabloStates.AA_6)
@@ -115,6 +118,7 @@ namespace Goooal
             Timer_1.Stop();
             TimerStopped = false;
             Timer_1_InitOrEnded = true;
+            stateMachine.Fire(TabloProcesses.Self);
         }
 
         private void InitState6()
@@ -388,6 +392,18 @@ namespace Goooal
             var vm = new HelpViewModel();
             var f = new HelpView() { DataContext = vm };
             f.ShowDialog();
+        }
+
+        public RelayCommand GraphCommand
+        {
+            get => new RelayCommand(Graph);
+        }
+
+        private void Graph(object obj)
+        {
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "UmiDotGraph.dot");
+            var graph = UmlDotGraph.Format(stateMachine.GetInfo());
+            File.WriteAllText(path, graph);
         }
     }
 }
