@@ -4,59 +4,108 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Goooal"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        BorderBrush="White" BorderThickness="2"
-        WindowStyle="ToolWindow" Foreground="White" Background="Black"
-        Title="Игра" SizeToContent="Height" Width="400">
-    <Window.Resources>
-        <Style TargetType="Label">
-            <Setter Property="Foreground" Value="White"></Setter>
-        </Style>
-    </Window.Resources>
-    <Viewbox>
-        <Grid>
-            <Grid Margin="15,15,15,15">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0">
-                    <Label>Команда-1</Label>
-                    <local:ClickSelectTextBox
-                    Text="{Binding Path=Team1, ValidatesOnDataErrors=True, 
-                    UpdateSourceTrigger=PropertyChanged}" MaxLength="50">
-                    </local:ClickSelectTextBox>
-                </StackPanel>
-                <StackPanel Grid.Row="1">
-                    <Label>Команда-2</Label>
-                    <local:ClickSelectTextBox
-                    Text="{Binding Path=Team2, ValidatesOnDataErrors=True, 
-                    UpdateSourceTrigger=PropertyChanged}" MaxLength="50">
-                    </local:ClickSelectTextBox>
-                </StackPanel>
-                <StackPanel Grid.Row="2">
-                    <Label>Название игры</Label>
-                    <local:ClickSelectTextBox
-                    Text="{Binding Path=PlayName, ValidatesOnDataErrors=True, 
-                    UpdateSourceTrigger=PropertyChanged}" MaxLength="50">
-                    </local:ClickSelectTextBox>
-                </StackPanel>
-                <StackPanel Grid.Row="3">
-                    <Label>Кол-во минут</Label>
-                    <local:ClickSelectTextBox
-                    Text="{Binding Path=Minutes, ValidatesOnDataErrors=True, 
-                    UpdateSourceTrigger=PropertyChanged}" MaxLength="50">
-                    </local:ClickSelectTextBox>
-                </StackPanel>
-                <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Width="60" Margin="10" IsDefault="True" Click="Ok_Click">ОК</Button>
-                    <Button Width="60" Margin="10">Отмена</Button>
-                </StackPanel>
-            </Grid>
-        </Grid>
-    </Viewbox>
+        WindowStyle="ToolWindow"  Foreground="White"
+        Title="Настройки"
+        Height="420" Width="400">
+        <DockPanel LastChildFill="False" Margin="15">
+            <TabControl DockPanel.Dock="Top">
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Height="10" Width="10" Fill="Black" />
+                            <TextBlock Margin="3">Общие</TextBlock>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <TabItem.Content>
+                    <Grid Margin="15">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0">
+                            <Label>Команда-1</Label>
+                            <local:ClickSelectTextBox
+                Text="{Binding Path=Team1, ValidatesOnDataErrors=True, 
+                UpdateSourceTrigger=PropertyChanged}" MaxLength="50">
+                            </local:ClickSelectTextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1">
+                            <Label>Команда-2</Label>
+                            <local:ClickSelectTextBox
+                Text="{Binding Path=Team2, ValidatesOnDataErrors=True, 
+                UpdateSourceTrigger=PropertyChanged}" MaxLength="50">
+                            </local:ClickSelectTextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2">
+                            <Label>Название игры</Label>
+                            <local:ClickSelectTextBox
+                Text="{Binding Path=PlayName, ValidatesOnDataErrors=True, 
+                UpdateSourceTrigger=PropertyChanged}" MaxLength="50">
+                            </local:ClickSelectTextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Row="3">
+                            <Label>Продолжительность (мин)</Label>
+                            <local:ClickSelectTextBox
+                Text="{Binding Path=Minutes, ValidatesOnDataErrors=True, 
+                UpdateSourceTrigger=PropertyChanged}" MaxLength="50">
+                            </local:ClickSelectTextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Row="4">
+                            <Label>Время на атаку (сек)</Label>
+                            <local:ClickSelectTextBox
+                Text="{Binding Path=Attack, ValidatesOnDataErrors=True, 
+                UpdateSourceTrigger=PropertyChanged}" MaxLength="50">
+                            </local:ClickSelectTextBox>
+                        </StackPanel>
+
+                    </Grid>
+                </TabItem.Content>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Height="10" Width="10" Fill="Black" />
+                            <TextBlock Margin="3">Цвета</TextBlock>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <TabItem.Content>
+                        <Grid Margin="15">
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0">
+                                <Label>Фон</Label>
+                            <xctk:ColorPicker SelectedColor="{Binding BackgroundColor}"></xctk:ColorPicker>
+                        </StackPanel>
+                            <StackPanel Grid.Row="1">
+                                <Label>Текст</Label>
+                                <xctk:ColorPicker SelectedColor="{Binding NormalTextColor}"></xctk:ColorPicker>
+                        </StackPanel>
+                            <StackPanel Grid.Row="2">
+                                <Label>Выделенный текст</Label>
+                                <xctk:ColorPicker SelectedColor="{Binding SelectedTextColor}"></xctk:ColorPicker>
+                        </StackPanel>
+                            <StackPanel Grid.Row="3">
+                                <Label>Эмблема</Label>
+                                <xctk:ColorPicker SelectedColor="{Binding LogoColor}"></xctk:ColorPicker>
+                        </StackPanel>
+                        </Grid>
+                    </TabItem.Content>
+                </TabItem>
+            </TabControl>
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Height="20" Width="60" Margin="15" IsDefault="True" Click="Ok_Click">ОК</Button>
+                <Button Height="20" Width="60" Margin="15" IsCancel="True">Отмена</Button>
+            </StackPanel>
+        </DockPanel>
 </Window>

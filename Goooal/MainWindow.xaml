@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Goooal"
-        mc:Ignorable="d" Background="Black" Foreground="LightBlue"
+        mc:Ignorable="d" Background="{Binding BackgroundColor}" Foreground="{Binding NormalTextColor}"
         WindowStyle="None" WindowState="Maximized"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
@@ -14,7 +14,7 @@
             <Style.Triggers>
                 <DataTrigger Binding="{Binding TimerStopped}"
                         Value="True">
-                    <Setter Property="Foreground" Value="Red"></Setter>
+                    <Setter Property="Foreground" Value="{Binding SelectedTextColor}"></Setter>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -25,7 +25,7 @@
                     <Setter Property="Visibility"  Value="Hidden"></Setter>
                 </DataTrigger>
             </Style.Triggers>
-            <Setter Property="Foreground" Value="Red"></Setter>
+            <Setter Property="Foreground" Value="{Binding SelectedTextColor}"></Setter>
         </Style>
     </Window.Resources>
     <Window.InputBindings>
@@ -103,7 +103,7 @@
                 <TextBlock Margin="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Team1}">
                 </TextBlock>
             </Viewbox>
-            <Border Grid.Row="1" BorderBrush="LightBlue" BorderThickness="5" CornerRadius="20" Margin="10" Name="tbScore1">
+            <Border Grid.Row="1" BorderBrush="{Binding NormalTextColor}" BorderThickness="5" CornerRadius="20" Margin="10" Name="tbScore1">
                 <Border.InputBindings>
                     <MouseBinding
                         MouseAction="LeftClick"
@@ -129,7 +129,7 @@
                             VerticalAlignment="Center" Text="FOULS">
                     </TextBlock>
                 </Viewbox>
-                <Border Grid.Column="1" BorderBrush="LightBlue" BorderThickness="3" CornerRadius="10">
+                <Border Grid.Column="1" BorderBrush="{Binding NormalTextColor}" BorderThickness="3" CornerRadius="10">
                     <Border.InputBindings>
                         <MouseBinding
                         MouseAction="LeftClick"
@@ -154,7 +154,9 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition Height="3*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Image Grid.Row="0" Source=".\images\unnamed.jpg"></Image>
+            <Viewbox Grid.Row="0">
+                <local:ExeView Background="{Binding BackgroundColor}"></local:ExeView>
+            </Viewbox>
             <Viewbox Grid.Row="1">
                 <TextBlock TextWrapping="Wrap" Margin="5" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding PlayName}">
                 </TextBlock>
@@ -169,20 +171,6 @@
                            Style="{StaticResource Timer_1}" Text="{Binding Interval_1, Converter={StaticResource tsConverter_1}}">
                 </TextBlock>
             </Viewbox>
-            <!--<Viewbox Grid.Row="1">
-                <TextBlock TextWrapping="Wrap" Margin="5" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Полуфинал">
-                </TextBlock>
-            </Viewbox>
-            <Viewbox Grid.Row="2">
-                <TextBlock Margin="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                           Style="{StaticResource Timer}" Text="15:00">
-                </TextBlock>
-            </Viewbox>
-            <Viewbox Grid.Row="3">
-                <TextBlock Margin="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                           Style="{StaticResource Timer_1}" Text="15">
-                </TextBlock>
-            </Viewbox>-->
         </Grid>
         <Grid Grid.Column="2" Margin="0,40,0,20">
             <Grid.RowDefinitions>
@@ -220,7 +208,7 @@
                             VerticalAlignment="Center" Text="FOULS">
                     </TextBlock>
                 </Viewbox>
-                <Border Grid.Column="1" BorderBrush="LightBlue" BorderThickness="3" CornerRadius="10">
+                <Border Grid.Column="1" BorderBrush="{Binding NormalTextColor}" BorderThickness="3" CornerRadius="10">
                     <Border.InputBindings>
                         <MouseBinding
                         MouseAction="LeftClick"

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Media;
 
 namespace Goooal
 {
@@ -45,6 +46,56 @@ namespace Goooal
             {
                 m_Minutes = value;
                 OnPropertyChanged("Minutes");
+            }
+        }
+        private int m_Attack;
+        public int Attack
+        {
+            get => m_Attack;
+            set
+            {
+                m_Attack = value;
+                OnPropertyChanged("Attack");
+            }
+        }
+        private Color? m_LogoColor;
+        public Color? LogoColor
+        {
+            get => m_LogoColor;
+            set
+            {
+                m_LogoColor = value;
+                OnPropertyChanged("LogoColor");
+            }
+        }
+        private Color? m_NormalTextColor;
+        public Color? NormalTextColor
+        {
+            get => m_NormalTextColor;
+            set
+            {
+                m_NormalTextColor = value;
+                OnPropertyChanged("NormalTextColor");
+            }
+        }
+        private Color? m_SelectedTextColor;
+        public Color? SelectedTextColor
+        {
+            get => m_SelectedTextColor;
+            set
+            {
+                m_SelectedTextColor = value;
+                OnPropertyChanged("SelectedTextColor");
+            }
+        }
+        private Color? m_BackgroundColor;
+        public Color? BackgroundColor
+        {
+            get => m_BackgroundColor;
+            set
+            {
+                m_BackgroundColor = value;
+                OnPropertyChanged("BackgroundColor");
             }
         }
     }

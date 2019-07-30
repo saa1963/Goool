@@ -6,6 +6,7 @@ using System.Windows.Threading;
 using Stateless;
 using System.IO;
 using Stateless.Graph;
+using System.Windows.Media;
 
 namespace Goooal
 {
@@ -19,7 +20,7 @@ namespace Goooal
     }
     public class MainWindowViewModel: NotifyPropertyChanged
     {
-        private TimeSpan m_InitIntervalValue = new TimeSpan(0, 1, 0);
+        private TimeSpan m_InitIntervalValue = new TimeSpan(0, 10, 0);
         private TimeSpan m_InitIntervalValue_1 = new TimeSpan(0, 0, 15);
 
         private readonly TimeSpan second = new TimeSpan(0, 0, 1);
@@ -315,6 +316,46 @@ namespace Goooal
                 OnPropertyChanged("Interval_1");
             }
         }
+        private SolidColorBrush m_BackgroundColor = Brushes.Black;
+        public SolidColorBrush BackgroundColor
+        {
+            get => m_BackgroundColor;
+            set
+            {
+                m_BackgroundColor = value;
+                OnPropertyChanged("BackgroundColor");
+            }
+        }
+        private SolidColorBrush m_NormalTextColor = Brushes.LightBlue;
+        public SolidColorBrush NormalTextColor
+        {
+            get => m_NormalTextColor;
+            set
+            {
+                m_NormalTextColor = value;
+                OnPropertyChanged("NormalTextColor");
+            }
+        }
+        private SolidColorBrush m_SelectedTextColor = Brushes.Red;
+        public SolidColorBrush SelectedTextColor
+        {
+            get => m_SelectedTextColor;
+            set
+            {
+                m_SelectedTextColor = value;
+                OnPropertyChanged("SelectedTextColor");
+            }
+        }
+        private SolidColorBrush m_LogoColor = Brushes.White;
+        public SolidColorBrush LogoColor
+        {
+            get => m_LogoColor;
+            set
+            {
+                m_LogoColor = value;
+                OnPropertyChanged("LogoColor");
+            }
+        }
         public RelayCommand Score2IncCommand
         {
             get => new RelayCommand(s => Score2++);
@@ -366,7 +407,18 @@ namespace Goooal
 
         private void EditData(object obj)
         {
-            var vm = new EditDataViewModel() { Team1 = Team1, Team2 = Team2, PlayName = PlayName, Minutes = m_InitIntervalValue.Minutes };
+            var vm = new EditDataViewModel()
+            {
+                Team1 = Team1,
+                Team2 = Team2,
+                PlayName = PlayName,
+                Minutes = m_InitIntervalValue.Minutes,
+                Attack = m_InitIntervalValue_1.Seconds,
+                LogoColor = m_LogoColor.Color,
+                NormalTextColor = m_NormalTextColor.Color,
+                SelectedTextColor = m_SelectedTextColor.Color,
+                BackgroundColor = m_BackgroundColor.Color
+            };
             var f = new EditDataView() { DataContext = vm };
             if (f.ShowDialog() ?? false)
             {
@@ -375,6 +427,11 @@ namespace Goooal
                 PlayName = vm.PlayName;
                 var oldInterval = m_InitIntervalValue;
                 m_InitIntervalValue = new TimeSpan(0, vm.Minutes, 0);
+                m_InitIntervalValue_1 = new TimeSpan(0, 0, vm.Attack);
+                LogoColor = new SolidColorBrush(vm.LogoColor.Value);
+                NormalTextColor = new SolidColorBrush(vm.NormalTextColor.Value);
+                SelectedTextColor = new SolidColorBrush(vm.SelectedTextColor.Value);
+                BackgroundColor = new SolidColorBrush(vm.BackgroundColor.Value);
                 if (!Timer.IsEnabled && Interval.Minutes == oldInterval.Minutes)
                 {
                     Interval = m_InitIntervalValue;
