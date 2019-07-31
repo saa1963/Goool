@@ -21,8 +21,10 @@ namespace Goooal
     }
     public class MainWindowViewModel: NotifyPropertyChanged
     {
+        private const int Attack_1 = 24;
         private TimeSpan m_InitIntervalValue = new TimeSpan(0, 10, 0);
         private TimeSpan m_InitIntervalValue_1 = new TimeSpan(0, 0, 15);
+        private TimeSpan m_InitIntervalValue_2 = new TimeSpan(0, 0, Attack_1);
 
         private readonly TimeSpan second = new TimeSpan(0, 0, 1);
         private DispatcherTimer Timer { get; set; }
@@ -47,17 +49,20 @@ namespace Goooal
                 .OnEntry(() => InitState1())
                 .PermitReentry(TabloProcesses.Ctrl_Space)
                 .Permit(TabloProcesses.Space, TabloStates.AI_5)
-                .PermitReentry(TabloProcesses.Z);
+                .PermitReentry(TabloProcesses.Z)
+                .PermitReentry(TabloProcesses.X);
             stateMachine.Configure(TabloStates.AI_5)
-                .OnEntry(() => InitState5())
+                .OnEntry((x) => InitState5(x))
                 .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
                 .Permit(TabloProcesses.Self, TabloStates.AA_6)
                 .PermitReentry(TabloProcesses.Space)
-                .PermitReentry(TabloProcesses.Z);
+                .PermitReentry(TabloProcesses.Z)
+                .PermitReentry(TabloProcesses.X);
             stateMachine.Configure(TabloStates.AA_6)
                 .OnEntry(() => InitState6())
                 .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
                 .Permit(TabloProcesses.Z, TabloStates.AI_5)
+                .Permit(TabloProcesses.X, TabloStates.AI_5)
                 .Permit(TabloProcesses.Space, TabloStates.PP_11)
                 .Permit(TabloProcesses.Timer_1, TabloStates.AE_8)
                 .Permit(TabloProcesses.Timer, TabloStates.EE_16);
@@ -67,39 +72,68 @@ namespace Goooal
                 .Permit(TabloProcesses.Timer, TabloStates.EE_16)
                 .Permit(TabloProcesses.Self, TabloStates.PI_9)
                 .Permit(TabloProcesses.Space, TabloStates.PE_12)
-                .PermitReentry(TabloProcesses.Z);
+                .PermitReentry(TabloProcesses.Z)
+                .PermitReentry(TabloProcesses.X);
             stateMachine.Configure(TabloStates.PI_9)
-                .OnEntry(() => InitState9())
+                .OnEntry((x) => InitState9(x))
                 .Permit(TabloProcesses.Space, TabloStates.AA_6)
                 .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
-                .PermitReentry(TabloProcesses.Z);
+                .PermitReentry(TabloProcesses.Z)
+                .PermitReentry(TabloProcesses.X);
             stateMachine.Configure(TabloStates.PP_11)
                 .OnEntry(() => InitState11())
                 .Permit(TabloProcesses.Z, TabloStates.PI_9)
+                .Permit(TabloProcesses.X, TabloStates.PI_9)
                 .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
                 .Permit(TabloProcesses.Space, TabloStates.AA_6);
             stateMachine.Configure(TabloStates.PE_12)
                 .OnEntry(() => InitState12())
                 .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
                 .Permit(TabloProcesses.Space, TabloStates.AE_8)
-                .PermitReentry(TabloProcesses.Z);
+                .PermitReentry(TabloProcesses.Z)
+                .PermitReentry(TabloProcesses.X);
             stateMachine.Configure(TabloStates.EE_16)
                 .OnEntry(() => InitState16())
                 .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
                 .PermitReentry(TabloProcesses.Space)
-                .PermitReentry(TabloProcesses.Z);
+                .PermitReentry(TabloProcesses.Z)
+                .PermitReentry(TabloProcesses.X);
             SetTimer();
             SetTimer_1();
             stateMachine.Fire(TabloProcesses.Ctrl_Space);
         }
 
-        private void InitState9()
+        private void InitState5(StateMachine<TabloStates, TabloProcesses>.Transition trans)
+        {
+            Timer.Start();
+            Timer_1.Stop();
+            TimerStopped = false;
+            Timer_1_InitOrEnded = true;
+            if (trans.Trigger == TabloProcesses.X)
+            {
+                Interval_1 = m_InitIntervalValue_2;
+            }
+            else
+            {
+                Interval_1 = m_InitIntervalValue_1;
+            }
+            stateMachine.Fire(TabloProcesses.Self);
+        }
+
+        private void InitState9(StateMachine<TabloStates, TabloProcesses>.Transition trans)
         {
             Timer.Stop();
             Timer_1.Stop();
             TimerStopped = true;
             Timer_1_InitOrEnded = true;
-            Interval_1 = m_InitIntervalValue_1;
+            if (trans.Trigger == TabloProcesses.X)
+            {
+                Interval_1 = m_InitIntervalValue_2;
+            }
+            else if (trans.Trigger == TabloProcesses.Z)
+            {
+                Interval_1 = m_InitIntervalValue_1;
+            }
         }
 
         private void InitState16()
@@ -141,16 +175,6 @@ namespace Goooal
             Timer_1.Start();
             TimerStopped = false;
             Timer_1_InitOrEnded = false;
-        }
-
-        private void InitState5()
-        {
-            Timer.Start();
-            Timer_1.Stop();
-            TimerStopped = false;
-            Timer_1_InitOrEnded = true;
-            Interval_1 = m_InitIntervalValue_1;
-            stateMachine.Fire(TabloProcesses.Self);
         }
 
         private void InitState1()
@@ -197,6 +221,11 @@ namespace Goooal
         private void SwitchTimer_1(object obj)
         {
             stateMachine.Fire(TabloProcesses.Z);
+        }
+
+        private void SwitchTimer_2(object obj)
+        {
+            stateMachine.Fire(TabloProcesses.X);
         }
 
         private void SetTimer()
@@ -392,6 +421,10 @@ namespace Goooal
         public RelayCommand SwitchTimer_1Command
         {
             get => new RelayCommand(SwitchTimer_1);
+        }
+        public RelayCommand SwitchTimer_2Command
+        {
+            get => new RelayCommand(SwitchTimer_2);
         }
         public RelayCommand ResetTimerCommand
         {

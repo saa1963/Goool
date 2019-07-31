@@ -82,6 +82,10 @@
                         Command="{Binding SwitchTimer_1Command}">
         </KeyBinding>
         <KeyBinding 
+                        Key="X"
+                        Command="{Binding SwitchTimer_2Command}">
+        </KeyBinding>
+        <KeyBinding 
                         Key="G"
                         Command="{Binding GraphCommand}">
         </KeyBinding>
