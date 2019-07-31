@@ -7,6 +7,7 @@ using Stateless;
 using System.IO;
 using Stateless.Graph;
 using System.Windows.Media;
+using Goooal.Properties;
 
 namespace Goooal
 {
@@ -16,7 +17,7 @@ namespace Goooal
     }
     enum TabloProcesses
     {
-        Space, Z, Self, Timer, Timer_1, Ctrl_Space
+        Space, Z, Self, Timer, Timer_1, Ctrl_Space, X
     }
     public class MainWindowViewModel: NotifyPropertyChanged
     {
@@ -29,6 +30,18 @@ namespace Goooal
 
         public MainWindowViewModel()
         {
+            m_InitIntervalValue = 
+                new TimeSpan(0, Settings.Default.Interval == 0 ? 10 : Settings.Default.Interval, 0);
+            m_InitIntervalValue_1 = 
+                new TimeSpan(0, 0, Settings.Default.Interval1 == 0 ? 15 : Settings.Default.Interval1);
+            Team1 = String.IsNullOrWhiteSpace(Settings.Default.Team1) ? "Команда 1" : Settings.Default.Team1;
+            Team2 = String.IsNullOrWhiteSpace(Settings.Default.Team2) ? "Команда 2" : Settings.Default.Team2;
+            PlayName = String.IsNullOrWhiteSpace(Settings.Default.PlayName) ? "Название игры" : Settings.Default.PlayName;
+            LogoColor = Settings.Default.LogoColor ?? Brushes.White;
+            NormalTextColor = Settings.Default.NormalTextColor ?? Brushes.LightBlue;
+            SelectedTextColor = Settings.Default.SelectedTextColor ?? Brushes.Red;
+            BackgroundColor = Settings.Default.BackgroundColor ?? Brushes.Black;
+
             stateMachine = new StateMachine<TabloStates, TabloProcesses>(TabloStates.II_1);
             stateMachine.Configure(TabloStates.II_1)
                 .OnEntry(() => InitState1())
@@ -224,7 +237,7 @@ namespace Goooal
             }
         }
 
-        private string m_Team1 = "Команда1";
+        private string m_Team1;
         public string Team1
         {
             get => m_Team1;
@@ -234,7 +247,7 @@ namespace Goooal
                 OnPropertyChanged("Team1");
             }
         }
-        private string m_Team2 = "Команда2";
+        private string m_Team2;
         public string Team2
         {
             get => m_Team2;
@@ -264,7 +277,7 @@ namespace Goooal
                 OnPropertyChanged("Fouls2");
             }
         }
-        private string m_PlayName = "Название игры";
+        private string m_PlayName;
         public string PlayName
         {
             get => m_PlayName;
@@ -316,7 +329,7 @@ namespace Goooal
                 OnPropertyChanged("Interval_1");
             }
         }
-        private SolidColorBrush m_BackgroundColor = Brushes.Black;
+        private SolidColorBrush m_BackgroundColor;
         public SolidColorBrush BackgroundColor
         {
             get => m_BackgroundColor;
@@ -326,7 +339,7 @@ namespace Goooal
                 OnPropertyChanged("BackgroundColor");
             }
         }
-        private SolidColorBrush m_NormalTextColor = Brushes.LightBlue;
+        private SolidColorBrush m_NormalTextColor;
         public SolidColorBrush NormalTextColor
         {
             get => m_NormalTextColor;
@@ -336,7 +349,7 @@ namespace Goooal
                 OnPropertyChanged("NormalTextColor");
             }
         }
-        private SolidColorBrush m_SelectedTextColor = Brushes.Red;
+        private SolidColorBrush m_SelectedTextColor;
         public SolidColorBrush SelectedTextColor
         {
             get => m_SelectedTextColor;
@@ -346,7 +359,7 @@ namespace Goooal
                 OnPropertyChanged("SelectedTextColor");
             }
         }
-        private SolidColorBrush m_LogoColor = Brushes.White;
+        private SolidColorBrush m_LogoColor;
         public SolidColorBrush LogoColor
         {
             get => m_LogoColor;
@@ -436,6 +449,16 @@ namespace Goooal
                 {
                     Interval = m_InitIntervalValue;
                 }
+                Settings.Default.Team1 = Team1;
+                Settings.Default.Team2 = Team2;
+                Settings.Default.PlayName = PlayName;
+                Settings.Default.Interval = vm.Minutes;
+                Settings.Default.Interval1 = vm.Attack;
+                Settings.Default.LogoColor = LogoColor;
+                Settings.Default.NormalTextColor = NormalTextColor;
+                Settings.Default.SelectedTextColor = SelectedTextColor;
+                Settings.Default.BackgroundColor = BackgroundColor;
+                Settings.Default.Save();
             }
         }
 
