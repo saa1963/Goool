@@ -25,7 +25,7 @@ namespace Goooal
         private TimeSpan m_InitIntervalValue = new TimeSpan(0, 10, 0);
         private TimeSpan m_InitIntervalValue_1 = new TimeSpan(0, 0, 15);
         private TimeSpan m_InitIntervalValue_2 = new TimeSpan(0, 0, Attack_1);
-
+        private TimeSpan m_АкуальноеНачальноеЗначениеТаймераДляБроска;
         private readonly TimeSpan second = new TimeSpan(0, 0, 1);
         private DispatcherTimer Timer { get; set; }
         private DispatcherTimer Timer_1 { get; set; }
@@ -48,9 +48,9 @@ namespace Goooal
             stateMachine.Configure(TabloStates.II_1)
                 .OnEntry(() => InitState1())
                 .PermitReentry(TabloProcesses.Ctrl_Space)
-                .Permit(TabloProcesses.Space, TabloStates.AI_5)
-                .PermitReentry(TabloProcesses.Z)
-                .PermitReentry(TabloProcesses.X);
+                .PermitReentry(TabloProcesses.Space)
+                .Permit(TabloProcesses.Z, TabloStates.AI_5)
+                .Permit(TabloProcesses.X, TabloStates.AI_5);
             stateMachine.Configure(TabloStates.AI_5)
                 .OnEntry((x) => InitState5(x))
                 .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
@@ -76,14 +76,14 @@ namespace Goooal
                 .PermitReentry(TabloProcesses.X);
             stateMachine.Configure(TabloStates.PI_9)
                 .OnEntry((x) => InitState9(x))
-                .Permit(TabloProcesses.Space, TabloStates.AA_6)
+                .Permit(TabloProcesses.X, TabloStates.AI_5)
+                .Permit(TabloProcesses.Z, TabloStates.AI_5)
                 .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
-                .PermitReentry(TabloProcesses.Z)
-                .PermitReentry(TabloProcesses.X);
+                .PermitReentry(TabloProcesses.Space);
             stateMachine.Configure(TabloStates.PP_11)
                 .OnEntry(() => InitState11())
-                .Permit(TabloProcesses.Z, TabloStates.PI_9)
-                .Permit(TabloProcesses.X, TabloStates.PI_9)
+                .Permit(TabloProcesses.Z, TabloStates.AI_5)
+                .Permit(TabloProcesses.X, TabloStates.AI_5)
                 .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
                 .Permit(TabloProcesses.Space, TabloStates.AA_6);
             stateMachine.Configure(TabloStates.PE_12)
@@ -105,39 +105,34 @@ namespace Goooal
 
         private void InitState5(StateMachine<TabloStates, TabloProcesses>.Transition trans)
         {
+#if DEBUG
+            PlayName = "AI_5";
+#endif
             Timer.Start();
             Timer_1.Stop();
             TimerStopped = false;
             Timer_1_InitOrEnded = true;
-            if (trans.Trigger == TabloProcesses.X)
-            {
-                Interval_1 = m_InitIntervalValue_2;
-            }
-            else
-            {
-                Interval_1 = m_InitIntervalValue_1;
-            }
+            Interval_1 = m_АкуальноеНачальноеЗначениеТаймераДляБроска;
             stateMachine.Fire(TabloProcesses.Self);
         }
 
         private void InitState9(StateMachine<TabloStates, TabloProcesses>.Transition trans)
         {
+#if DEBUG
+            PlayName = "PI_9";
+#endif
             Timer.Stop();
             Timer_1.Stop();
             TimerStopped = true;
             Timer_1_InitOrEnded = true;
-            if (trans.Trigger == TabloProcesses.X)
-            {
-                Interval_1 = m_InitIntervalValue_2;
-            }
-            else if (trans.Trigger == TabloProcesses.Z)
-            {
-                Interval_1 = m_InitIntervalValue_1;
-            }
+            Interval_1 = m_АкуальноеНачальноеЗначениеТаймераДляБроска;
         }
 
         private void InitState16()
         {
+#if DEBUG
+            PlayName = "EE_16";
+#endif
             Timer.Stop();
             Timer_1.Stop();
             TimerStopped = false;
@@ -146,6 +141,9 @@ namespace Goooal
 
         private void InitState12()
         {
+#if DEBUG
+            PlayName = "PE_12";
+#endif
             Timer.Stop();
             Timer_1.Stop();
             TimerStopped = true;
@@ -154,6 +152,9 @@ namespace Goooal
 
         private void InitState11()
         {
+#if DEBUG
+            PlayName = "PP_11";
+#endif
             Timer.Stop();
             Timer_1.Stop();
             TimerStopped = true;
@@ -162,6 +163,9 @@ namespace Goooal
 
         private void InitState8()
         {
+#if DEBUG
+            PlayName = "AE_8";
+#endif
             Timer.Start();
             Timer_1.Stop();
             TimerStopped = false;
@@ -171,6 +175,9 @@ namespace Goooal
 
         private void InitState6()
         {
+#if DEBUG
+            PlayName = "AA_6";
+#endif
             Timer.Start();
             Timer_1.Start();
             TimerStopped = false;
@@ -179,6 +186,9 @@ namespace Goooal
 
         private void InitState1()
         {
+#if DEBUG
+            PlayName = "II_1";
+#endif
             Timer.Stop();
             Timer_1.Stop();
             TimerStopped = false;
@@ -220,11 +230,13 @@ namespace Goooal
 
         private void SwitchTimer_1(object obj)
         {
+            m_АкуальноеНачальноеЗначениеТаймераДляБроска = m_InitIntervalValue_1;
             stateMachine.Fire(TabloProcesses.Z);
         }
 
         private void SwitchTimer_2(object obj)
         {
+            m_АкуальноеНачальноеЗначениеТаймераДляБроска = m_InitIntervalValue_2;
             stateMachine.Fire(TabloProcesses.X);
         }
 
@@ -244,7 +256,7 @@ namespace Goooal
 
         private void M_Timer_Tick(object sender, EventArgs e)
         {
-            if (Interval.Ticks > 0)
+            if (Interval.TotalSeconds > 1)
             {
                 Interval = Interval.Subtract(second);
             }
@@ -256,7 +268,7 @@ namespace Goooal
 
         private void M_Timer_1_Tick(object sender, EventArgs e)
         {
-            if (Interval_1.Ticks > 0)
+            if (Interval_1.TotalSeconds > 1)
             {
                 Interval_1 = Interval_1.Subtract(second);
             }
