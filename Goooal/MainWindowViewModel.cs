@@ -13,7 +13,7 @@ namespace Goooal
 {
     enum TabloStates
     {
-        II_1, AI_5, AA_6, AE_8, PI_9, PP_11, PE_12, EE_16
+        Начало, СбросТаймераБроска, Игра, ОстановкаПоТаймеруБроска, ОстановкаСудьей, Конец
     }
     enum TabloProcesses
     {
@@ -25,7 +25,7 @@ namespace Goooal
         private TimeSpan m_InitIntervalValue = new TimeSpan(0, 10, 0);
         private TimeSpan m_InitIntervalValue_1 = new TimeSpan(0, 0, 15);
         private TimeSpan m_InitIntervalValue_2 = new TimeSpan(0, 0, Attack_1);
-        private TimeSpan m_АкуальноеНачальноеЗначениеТаймераДляБроска;
+        private TimeSpan m_АкуальноеНачальноеЗначениеТаймераБроска;
         private readonly TimeSpan second = new TimeSpan(0, 0, 1);
         private DispatcherTimer Timer { get; set; }
         private DispatcherTimer Timer_1 { get; set; }
@@ -44,57 +44,43 @@ namespace Goooal
             SelectedTextColor = Settings.Default.SelectedTextColor ?? Brushes.Red;
             BackgroundColor = Settings.Default.BackgroundColor ?? Brushes.Black;
 
-            stateMachine = new StateMachine<TabloStates, TabloProcesses>(TabloStates.II_1);
-            stateMachine.Configure(TabloStates.II_1)
+            stateMachine = new StateMachine<TabloStates, TabloProcesses>(TabloStates.Начало);
+            stateMachine.Configure(TabloStates.Начало)
                 .OnEntry(() => InitState1())
                 .PermitReentry(TabloProcesses.Ctrl_Space)
                 .PermitReentry(TabloProcesses.Space)
-                .Permit(TabloProcesses.Z, TabloStates.AI_5)
-                .Permit(TabloProcesses.X, TabloStates.AI_5);
-            stateMachine.Configure(TabloStates.AI_5)
+                .Permit(TabloProcesses.Z, TabloStates.СбросТаймераБроска)
+                .Permit(TabloProcesses.X, TabloStates.СбросТаймераБроска);
+            stateMachine.Configure(TabloStates.СбросТаймераБроска)
                 .OnEntry((x) => InitState5(x))
-                .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
-                .Permit(TabloProcesses.Self, TabloStates.AA_6)
+                .Permit(TabloProcesses.Ctrl_Space, TabloStates.Начало)
+                .Permit(TabloProcesses.Self, TabloStates.Игра)
                 .PermitReentry(TabloProcesses.Space)
                 .PermitReentry(TabloProcesses.Z)
                 .PermitReentry(TabloProcesses.X);
-            stateMachine.Configure(TabloStates.AA_6)
+            stateMachine.Configure(TabloStates.Игра)
                 .OnEntry(() => InitState6())
-                .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
-                .Permit(TabloProcesses.Z, TabloStates.AI_5)
-                .Permit(TabloProcesses.X, TabloStates.AI_5)
-                .Permit(TabloProcesses.Space, TabloStates.PP_11)
-                .Permit(TabloProcesses.Timer_1, TabloStates.AE_8)
-                .Permit(TabloProcesses.Timer, TabloStates.EE_16);
-            stateMachine.Configure(TabloStates.AE_8)
-                .OnEntry(() => InitState8())
-                .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
-                .Permit(TabloProcesses.Timer, TabloStates.EE_16)
-                .Permit(TabloProcesses.Self, TabloStates.PI_9)
-                .Permit(TabloProcesses.Space, TabloStates.PE_12)
-                .PermitReentry(TabloProcesses.Z)
-                .PermitReentry(TabloProcesses.X);
-            stateMachine.Configure(TabloStates.PI_9)
+                .Permit(TabloProcesses.Ctrl_Space, TabloStates.Начало)
+                .Permit(TabloProcesses.Z, TabloStates.СбросТаймераБроска)
+                .Permit(TabloProcesses.X, TabloStates.СбросТаймераБроска)
+                .Permit(TabloProcesses.Space, TabloStates.ОстановкаСудьей)
+                .Permit(TabloProcesses.Timer_1, TabloStates.ОстановкаПоТаймеруБроска)
+                .Permit(TabloProcesses.Timer, TabloStates.Конец);
+            stateMachine.Configure(TabloStates.ОстановкаПоТаймеруБроска)
                 .OnEntry((x) => InitState9(x))
-                .Permit(TabloProcesses.X, TabloStates.AI_5)
-                .Permit(TabloProcesses.Z, TabloStates.AI_5)
-                .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
+                .Permit(TabloProcesses.X, TabloStates.СбросТаймераБроска)
+                .Permit(TabloProcesses.Z, TabloStates.СбросТаймераБроска)
+                .Permit(TabloProcesses.Ctrl_Space, TabloStates.Начало)
                 .PermitReentry(TabloProcesses.Space);
-            stateMachine.Configure(TabloStates.PP_11)
+            stateMachine.Configure(TabloStates.ОстановкаСудьей)
                 .OnEntry(() => InitState11())
-                .Permit(TabloProcesses.Z, TabloStates.AI_5)
-                .Permit(TabloProcesses.X, TabloStates.AI_5)
-                .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
-                .Permit(TabloProcesses.Space, TabloStates.AA_6);
-            stateMachine.Configure(TabloStates.PE_12)
-                .OnEntry(() => InitState12())
-                .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
-                .Permit(TabloProcesses.Space, TabloStates.AE_8)
-                .PermitReentry(TabloProcesses.Z)
-                .PermitReentry(TabloProcesses.X);
-            stateMachine.Configure(TabloStates.EE_16)
+                .Permit(TabloProcesses.Z, TabloStates.СбросТаймераБроска)
+                .Permit(TabloProcesses.X, TabloStates.СбросТаймераБроска)
+                .Permit(TabloProcesses.Ctrl_Space, TabloStates.Начало)
+                .Permit(TabloProcesses.Space, TabloStates.Игра);
+            stateMachine.Configure(TabloStates.Конец)
                 .OnEntry(() => InitState16())
-                .Permit(TabloProcesses.Ctrl_Space, TabloStates.II_1)
+                .Permit(TabloProcesses.Ctrl_Space, TabloStates.Начало)
                 .PermitReentry(TabloProcesses.Space)
                 .PermitReentry(TabloProcesses.Z)
                 .PermitReentry(TabloProcesses.X);
@@ -112,7 +98,7 @@ namespace Goooal
             Timer_1.Stop();
             TimerStopped = false;
             Timer_1_InitOrEnded = true;
-            Interval_1 = m_АкуальноеНачальноеЗначениеТаймераДляБроска;
+            Interval_1 = m_АкуальноеНачальноеЗначениеТаймераБроска;
             stateMachine.Fire(TabloProcesses.Self);
         }
 
@@ -125,7 +111,7 @@ namespace Goooal
             Timer_1.Stop();
             TimerStopped = true;
             Timer_1_InitOrEnded = true;
-            Interval_1 = m_АкуальноеНачальноеЗначениеТаймераДляБроска;
+            Interval_1 = m_АкуальноеНачальноеЗначениеТаймераБроска;
         }
 
         private void InitState16()
@@ -139,17 +125,6 @@ namespace Goooal
             Timer_1_InitOrEnded = true;
         }
 
-        private void InitState12()
-        {
-#if DEBUG
-            PlayName = "PE_12";
-#endif
-            Timer.Stop();
-            Timer_1.Stop();
-            TimerStopped = true;
-            Timer_1_InitOrEnded = true;
-        }
-
         private void InitState11()
         {
 #if DEBUG
@@ -159,18 +134,6 @@ namespace Goooal
             Timer_1.Stop();
             TimerStopped = true;
             Timer_1_InitOrEnded = false;
-        }
-
-        private void InitState8()
-        {
-#if DEBUG
-            PlayName = "AE_8";
-#endif
-            Timer.Start();
-            Timer_1.Stop();
-            TimerStopped = false;
-            Timer_1_InitOrEnded = true;
-            stateMachine.Fire(TabloProcesses.Self);
         }
 
         private void InitState6()
@@ -230,13 +193,13 @@ namespace Goooal
 
         private void SwitchTimer_1(object obj)
         {
-            m_АкуальноеНачальноеЗначениеТаймераДляБроска = m_InitIntervalValue_1;
+            m_АкуальноеНачальноеЗначениеТаймераБроска = m_InitIntervalValue_1;
             stateMachine.Fire(TabloProcesses.Z);
         }
 
         private void SwitchTimer_2(object obj)
         {
-            m_АкуальноеНачальноеЗначениеТаймераДляБроска = m_InitIntervalValue_2;
+            m_АкуальноеНачальноеЗначениеТаймераБроска = m_InitIntervalValue_2;
             stateMachine.Fire(TabloProcesses.X);
         }
 
