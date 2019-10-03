@@ -46,20 +46,20 @@ namespace Goooal
 
             stateMachine = new StateMachine<TabloStates, TabloProcesses>(TabloStates.Начало);
             stateMachine.Configure(TabloStates.Начало)
-                .OnEntry(() => InitState1())
+                .OnEntry(() => Init_Начало_State1())
                 .PermitReentry(TabloProcesses.Ctrl_Space)
                 .PermitReentry(TabloProcesses.Space)
                 .Permit(TabloProcesses.Z, TabloStates.СбросТаймераБроска)
                 .Permit(TabloProcesses.X, TabloStates.СбросТаймераБроска);
             stateMachine.Configure(TabloStates.СбросТаймераБроска)
-                .OnEntry((x) => InitState5(x))
+                .OnEntry((x) => Init_СбросТаймераБроска_State5(x))
                 .Permit(TabloProcesses.Ctrl_Space, TabloStates.Начало)
                 .Permit(TabloProcesses.Self, TabloStates.Игра)
                 .PermitReentry(TabloProcesses.Space)
                 .PermitReentry(TabloProcesses.Z)
                 .PermitReentry(TabloProcesses.X);
             stateMachine.Configure(TabloStates.Игра)
-                .OnEntry(() => InitState6())
+                .OnEntry(() => Init_Игра_State6())
                 .Permit(TabloProcesses.Ctrl_Space, TabloStates.Начало)
                 .Permit(TabloProcesses.Z, TabloStates.СбросТаймераБроска)
                 .Permit(TabloProcesses.X, TabloStates.СбросТаймераБроска)
@@ -67,19 +67,19 @@ namespace Goooal
                 .Permit(TabloProcesses.Timer_1, TabloStates.ОстановкаПоТаймеруБроска)
                 .Permit(TabloProcesses.Timer, TabloStates.Конец);
             stateMachine.Configure(TabloStates.ОстановкаПоТаймеруБроска)
-                .OnEntry((x) => InitState9(x))
+                .OnEntry((x) => Init_ОстановкаПоТаймеруБроска_State9(x))
                 .Permit(TabloProcesses.X, TabloStates.СбросТаймераБроска)
                 .Permit(TabloProcesses.Z, TabloStates.СбросТаймераБроска)
                 .Permit(TabloProcesses.Ctrl_Space, TabloStates.Начало)
                 .PermitReentry(TabloProcesses.Space);
             stateMachine.Configure(TabloStates.ОстановкаСудьей)
-                .OnEntry(() => InitState11())
+                .OnEntry(() => Init_ОстановкаСудьей_State11())
                 .Permit(TabloProcesses.Z, TabloStates.СбросТаймераБроска)
                 .Permit(TabloProcesses.X, TabloStates.СбросТаймераБроска)
                 .Permit(TabloProcesses.Ctrl_Space, TabloStates.Начало)
                 .Permit(TabloProcesses.Space, TabloStates.Игра);
             stateMachine.Configure(TabloStates.Конец)
-                .OnEntry(() => InitState16())
+                .OnEntry(() => Init_Конец_State16())
                 .Permit(TabloProcesses.Ctrl_Space, TabloStates.Начало)
                 .PermitReentry(TabloProcesses.Space)
                 .PermitReentry(TabloProcesses.Z)
@@ -89,7 +89,7 @@ namespace Goooal
             stateMachine.Fire(TabloProcesses.Ctrl_Space);
         }
 
-        private void InitState5(StateMachine<TabloStates, TabloProcesses>.Transition trans)
+        private void Init_СбросТаймераБроска_State5(StateMachine<TabloStates, TabloProcesses>.Transition trans)
         {
 #if DEBUG
             PlayName = "AI_5";
@@ -102,7 +102,7 @@ namespace Goooal
             stateMachine.Fire(TabloProcesses.Self);
         }
 
-        private void InitState9(StateMachine<TabloStates, TabloProcesses>.Transition trans)
+        private void Init_ОстановкаПоТаймеруБроска_State9(StateMachine<TabloStates, TabloProcesses>.Transition trans)
         {
 #if DEBUG
             PlayName = "PI_9";
@@ -114,7 +114,7 @@ namespace Goooal
             Interval_1 = m_АкуальноеНачальноеЗначениеТаймераБроска;
         }
 
-        private void InitState16()
+        private void Init_Конец_State16()
         {
 #if DEBUG
             PlayName = "EE_16";
@@ -125,7 +125,7 @@ namespace Goooal
             Timer_1_InitOrEnded = true;
         }
 
-        private void InitState11()
+        private void Init_ОстановкаСудьей_State11()
         {
 #if DEBUG
             PlayName = "PP_11";
@@ -133,10 +133,10 @@ namespace Goooal
             Timer.Stop();
             Timer_1.Stop();
             TimerStopped = true;
-            Timer_1_InitOrEnded = false;
+            //Timer_1_InitOrEnded = false;
         }
 
-        private void InitState6()
+        private void Init_Игра_State6()
         {
 #if DEBUG
             PlayName = "AA_6";
@@ -144,10 +144,17 @@ namespace Goooal
             Timer.Start();
             Timer_1.Start();
             TimerStopped = false;
-            Timer_1_InitOrEnded = false;
+            if (Interval.TotalSeconds > Interval_1.TotalSeconds)
+            {
+                Timer_1_InitOrEnded = false;
+            }
+            else
+            {
+                Timer_1_InitOrEnded = true;
+            }
         }
 
-        private void InitState1()
+        private void Init_Начало_State1()
         {
 #if DEBUG
             PlayName = "II_1";
@@ -219,7 +226,7 @@ namespace Goooal
 
         private void M_Timer_Tick(object sender, EventArgs e)
         {
-            if (Interval.TotalSeconds > 1)
+            if (Interval.TotalSeconds > 0)
             {
                 Interval = Interval.Subtract(second);
             }
